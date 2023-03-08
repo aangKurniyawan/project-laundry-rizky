@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 08, 2023 at 02:57 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 5.6.39
+-- Waktu pembuatan: 08 Mar 2023 pada 10.19
+-- Versi server: 10.4.24-MariaDB
+-- Versi PHP: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,7 +24,28 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_owner`
+-- Struktur dari tabel `tb_jenis_laundry`
+--
+
+CREATE TABLE `tb_jenis_laundry` (
+  `id_jenis_laundry` int(11) NOT NULL,
+  `nama_jenis_laundry` varchar(50) NOT NULL,
+  `harga_jenis_laundry` varchar(6) NOT NULL,
+  `deskripsi_jenis_laundry` text NOT NULL,
+  `deleted` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_jenis_laundry`
+--
+
+INSERT INTO `tb_jenis_laundry` (`id_jenis_laundry`, `nama_jenis_laundry`, `harga_jenis_laundry`, `deskripsi_jenis_laundry`, `deleted`) VALUES
+(1, 'terd wrtwew', '234242', '243242gdg sdfsgas', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tb_owner`
 --
 
 CREATE TABLE `tb_owner` (
@@ -38,7 +58,7 @@ CREATE TABLE `tb_owner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_owner`
+-- Dumping data untuk tabel `tb_owner`
 --
 
 INSERT INTO `tb_owner` (`id_owner`, `nama_owner`, `no_telepon_owner`, `email_owner`, `password_owner`, `deleted`) VALUES
@@ -48,7 +68,7 @@ INSERT INTO `tb_owner` (`id_owner`, `nama_owner`, `no_telepon_owner`, `email_own
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_pelanggan`
+-- Struktur dari tabel `tb_pelanggan`
 --
 
 CREATE TABLE `tb_pelanggan` (
@@ -62,7 +82,7 @@ CREATE TABLE `tb_pelanggan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_pelanggan`
+-- Dumping data untuk tabel `tb_pelanggan`
 --
 
 INSERT INTO `tb_pelanggan` (`id_pelanggan`, `nama_pelanggan`, `email_pelanggan`, `password_pelanggan`, `no_telepon_pelanggan`, `alamat_pelanggan`, `deleted`) VALUES
@@ -72,7 +92,7 @@ INSERT INTO `tb_pelanggan` (`id_pelanggan`, `nama_pelanggan`, `email_pelanggan`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_staf`
+-- Struktur dari tabel `tb_staf`
 --
 
 CREATE TABLE `tb_staf` (
@@ -85,7 +105,7 @@ CREATE TABLE `tb_staf` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_staf`
+-- Dumping data untuk tabel `tb_staf`
 --
 
 INSERT INTO `tb_staf` (`id_staf`, `nama_staf`, `no_telepon_staf`, `email_staf`, `password_staf`, `deleted`) VALUES
@@ -96,41 +116,53 @@ INSERT INTO `tb_staf` (`id_staf`, `nama_staf`, `no_telepon_staf`, `email_staf`, 
 --
 
 --
--- Indexes for table `tb_owner`
+-- Indeks untuk tabel `tb_jenis_laundry`
+--
+ALTER TABLE `tb_jenis_laundry`
+  ADD PRIMARY KEY (`id_jenis_laundry`);
+
+--
+-- Indeks untuk tabel `tb_owner`
 --
 ALTER TABLE `tb_owner`
   ADD PRIMARY KEY (`id_owner`);
 
 --
--- Indexes for table `tb_pelanggan`
+-- Indeks untuk tabel `tb_pelanggan`
 --
 ALTER TABLE `tb_pelanggan`
   ADD PRIMARY KEY (`id_pelanggan`);
 
 --
--- Indexes for table `tb_staf`
+-- Indeks untuk tabel `tb_staf`
 --
 ALTER TABLE `tb_staf`
   ADD PRIMARY KEY (`id_staf`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `tb_owner`
+-- AUTO_INCREMENT untuk tabel `tb_jenis_laundry`
+--
+ALTER TABLE `tb_jenis_laundry`
+  MODIFY `id_jenis_laundry` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `tb_owner`
 --
 ALTER TABLE `tb_owner`
   MODIFY `id_owner` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `tb_pelanggan`
+-- AUTO_INCREMENT untuk tabel `tb_pelanggan`
 --
 ALTER TABLE `tb_pelanggan`
   MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `tb_staf`
+-- AUTO_INCREMENT untuk tabel `tb_staf`
 --
 ALTER TABLE `tb_staf`
   MODIFY `id_staf` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
