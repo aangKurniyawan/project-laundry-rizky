@@ -104,5 +104,40 @@
         public function update_pelanggan($id_pelanggan,$data){
             return $this->db->where('id_pelanggan',$id_pelanggan)->update('tb_pelanggan',$data);
         }
+
+        public function get_jenis_laundry(){
+            return $this->db->where('deleted',0)
+                            ->from('tb_jenis_laundry')
+                            ->get()->result();
+        }
+
+        public function get_nama_jenis_laundry($nama_jenis_laundry){
+            return $this->db->where('deleted',0)
+                            ->where('nama_jenis_laundry',$nama_jenis_laundry)
+                            ->from('tb_jenis_laundry')
+                            ->get()->result();
+        }
+
+        public function insert_jenis_laundry($data){
+            return $this->db->insert('tb_jenis_laundry',$data);
+        }
+
+        public function get_edit_jenis_laundry($id_jenis_laundry){
+            return $this->db->where('id_jenis_laundry',$id_jenis_laundry)
+                            ->from('tb_jenis_laundry')
+                            ->get()->result();
+        }
+
+        public function get_nama_jenis_laundry_edit($id_jenis_laundry,$nama_jenis_laundry){
+            return $this->db->where('deleted',0)
+                            ->where('id_jenis_laundry !=',$id_jenis_laundry)
+                            ->where('nama_jenis_laundry',$nama_jenis_laundry)
+                            ->from('tb_jenis_laundry')
+                            ->get()->num_rows();
+        }
+
+        public function update_jenis_laundry($id_jenis_laundry,$data){
+            return $this->db->where('id_jenis_laundry',$id_jenis_laundry)->update('tb_jenis_laundry',$data);
+        }
     }
 ?>

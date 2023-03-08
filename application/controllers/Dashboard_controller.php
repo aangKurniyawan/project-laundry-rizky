@@ -324,5 +324,98 @@
                 redirect(base_url('masterpelanggan'),'refresh');
             }
         }
+
+        public function master_jenis_laundry(){
+            $data['listjenislaundry'] = $this->Dashboard_model->get_jenis_laundry();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('master_data/master_jenis_laundry/index-master-jenis-laundry',$data);
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function form_tambah_jenis_laundry(){
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('master_data/master_jenis_laundry/form-tambah-jenis-laundry');
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function insert_jenis_laundry(){
+            $nama_jenis_laundry = $this->input->post('nama_jenis_laundry');
+            $harga_jenis_laundry = $this->input->post('harga_jenis_laundry');
+            $deskripsi_jenis_laundry = $this->input->post('deskripsi_jenis_laundry');
+            $deleted = 0;
+
+            $data = array(
+                'nama_jenis_laundry' => $nama_jenis_laundry,
+                'harga_jenis_laundry' => $harga_jenis_laundry,
+                'deskripsi_jenis_laundry' => $deskripsi_jenis_laundry,
+                'deleted' => $deleted
+            );
+
+            $cek_nama_jenis_laundry = $this->Dashboard_model->get_nama_jenis_laundry($nama_jenis_laundry);
+
+            if($cek_nama_jenis_laundry != null){
+                $this->session->set_flashdata('gagal','info: data nama jenis laundry sudah tersedia silahkan cek kembali');
+                redirect(base_url('formaddjenislaundry'),'refresh');
+            }else{
+                if($this->Dashboard_model->insert_jenis_laundry($data)){
+                    $this->session->set_flashdata('berhasil','info: data berhasil disimpan');
+                    redirect(base_url('masterjenislaundry'),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data gagal disimpan silahkan cobalagi');
+                    redirect(base_url('formaddjenislaundry'),'refresh');
+                }
+            }
+        }
+
+        public function form_edit_jenis_laundry(){
+            $id_jenis_laundry = $this->uri->segment(2);
+            $data['editjenislaundry'] = $this->Dashboard_model->get_edit_jenis_laundry($id_jenis_laundry);
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('master_data/master_jenis_laundry/form-edit-jenis-laundry',$data);
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function update_jenis_laundry(){
+            $id_jenis_laundry = $this->input->post('id_jenis_laundry');
+            $nama_jenis_laundry = $this->input->post('nama_jenis_laundry');
+            $harga_jenis_laundry = $this->input->post('harga_jenis_laundry');
+            $deskripsi_jenis_laundry = $this->input->post('deskripsi_jenis_laundry');
+
+            $data = array(
+                'nama_jenis_laundry' => $nama_jenis_laundry,
+                'harga_jenis_laundry' => $harga_jenis_laundry,
+                'deskripsi_jenis_laundry' => $deskripsi_jenis_laundry
+            );
+
+            $cek_nama_jenis_laundry = $this->Dashboard_model->get_nama_jenis_laundry_edit($id_jenis_laundry,$nama_jenis_laundry);
+
+            if($cek_nama_jenis_laundry != null){
+                $this->session->set_flashdata('gagal','info: data nama jenis laundry sudah tersedia silahkan cek kembali');
+                redirect(base_url('formeditjenislaundry/'.$id_jenis_laundry),'refresh');
+            }else{
+                if($this->Dashboard_model->update_jenis_laundry($id_jenis_laundry,$data)){
+                    $this->session->set_flashdata('berhasil','info: data berhasil dirubah');
+                    redirect(base_url('masterjenislaundry'),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data gagal dirubah silahkan cobalagi');
+                    redirect(base_url('formeditjenislaundry/'.$id_jenis_laundry),'refresh');
+                }
+            }
+        }
+
+        public function hapus_jenis_laundry(){
+            $id_jenis_laundry = $this->input->post('id_jenis_laundry');
+            $deleted = 1;
+
+            $data = array('deleted' => $deleted);
+
+            if($this->Dashboard_model->update_jenis_laundry($id_jenis_laundry,$data)){
+                $this->session->set_flashdata('berhasil','info: data berhasil dihapus');
+                redirect(base_url('masterjenislaundry'),'refresh');
+            }else{
+                $this->session->set_flashdata('gagal','info: data gagal dihapus silahkan cobalagi');
+                redirect(base_url('formeditjenislaundry/'.$id_jenis_laundry),'refresh');
+            }
+        }
     }
 ?>
