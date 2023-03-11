@@ -20,6 +20,12 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/dist/css/skins/_all-skins.min.css">
 
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugins/colorpicker/bootstrap-colorpicker.min.css">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugins/timepicker/bootstrap-timepicker.min.css">
+
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugins/select2/select2.min.css">
+
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugins/datatables/dataTables.bootstrap.css">
 
 
@@ -337,12 +343,12 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?php echo base_url('masterjenislaundry');?>"><i class="fa fa-circle-o"></i> Jenis Paket Laundry</a></li>
-                <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Jenis Pembayaran</a></li>
+                <li><a href="<?php echo base_url('masterjenisbayar');?>"><i class="fa fa-circle-o"></i> Jenis Pembayaran</a></li>
               </ul>
             </li>
             <li>
-              <a href="pages/widgets.html">
-                <i class="fa fa-th"></i> <span>Widgets</span> <small class="label pull-right bg-green">new</small>
+              <a href="<?php echo base_url('transaksi');?>">
+                <i class="fa fa-edit"></i> <span>Transaksi</span>
               </a>
             </li>
             <li class="treeview">

@@ -329,7 +329,7 @@
             $data['listjenislaundry'] = $this->Dashboard_model->get_jenis_laundry();
             $this->load->view('header/index-header-dashboard');
             $this->load->view('master_data/master_jenis_laundry/index-master-jenis-laundry',$data);
-            $this->load->view('footer/index-footer-dashboard');
+            //$this->load->view('footer/index-footer-dashboard');
         }
 
         public function form_tambah_jenis_laundry(){
@@ -416,6 +416,202 @@
                 $this->session->set_flashdata('gagal','info: data gagal dihapus silahkan cobalagi');
                 redirect(base_url('formeditjenislaundry/'.$id_jenis_laundry),'refresh');
             }
+        }
+
+        public function master_jenis_bayar(){
+            $data['listjenisbayar'] = $this->Dashboard_model->get_jenis_bayar();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('master_data/master_jenis_bayar/index-master-jenis-bayar',$data);
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function form_tambah_jenis_bayar(){
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('master_data/master_jenis_bayar/form-tambah-jenis-bayar');
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function insert_jenis_bayar(){
+            $nama_jenis_bayar = $this->input->post('nama_jenis_bayar');
+            $deleted = 0;
+
+            $data = array(
+                'nama_jenis_bayar' => $nama_jenis_bayar,
+                'deleted' => $deleted
+            );
+
+            $cek_nama_jenis_bayar = $this->Dashboard_model->get_nama_jenis_bayar($nama_jenis_bayar);
+
+            if($cek_nama_jenis_bayar != null){
+                $this->session->set_flashdata('gagal','info: nama jenis bayar sudah tersedia, silahkan cek data');
+                redirect(base_url('formaddjenisbayar'),'refresh');
+            }else{
+                if($this->Dashboard_model->insert_jenis_bayar($data)){
+                    $this->session->set_flashdata('berhasil','info: data berhasil disimpan');
+                    redirect(base_url("masterjenisbayar"),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data gagal disimpan, silahkan cobalagi');
+                    redirect(base_url('formaddjenisbayar'),'refresh');
+                }
+            }
+        }
+
+        public function form_edit_jenis_bayar(){
+            $id_jenis_bayar = $this->uri->segment(2);
+            $data['editjenisbayar'] = $this->Dashboard_model->get_edit_jenis_bayar($id_jenis_bayar);
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('master_data/master_jenis_bayar/form-edit-jenis-bayar',$data);
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function update_jenis_bayar(){
+            $id_jenis_bayar = $this->input->post('id_jenis_bayar');
+            $nama_jenis_bayar = $this->input->post('nama_jenis_bayar');
+
+            $data = array(
+                'nama_jenis_bayar' => $nama_jenis_bayar
+            );
+
+            $cek_nama_jenis_bayar = $this->Dashboard_model->get_nama_jenis_bayar_edit($id_jenis_bayar,$nama_jenis_bayar);
+
+            if($cek_nama_jenis_bayar != null){
+                $this->session->set_flashdata('gagal','info: nama jenis bayar sudah tersedia, silahkan cek data');
+                redirect(base_url('formeditjenisbayar/'.$id_jenis_bayar),'refresh');
+            }else{
+                if($this->Dashboard_model->update_jenis_bayar($id_jenis_bayar,$data)){
+                    $this->session->set_flashdata('berhasil','info: data berhasil dirubah');
+                    redirect(base_url("masterjenisbayar"),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data gagal dirubah, silahkan cobalagi');
+                    redirect(base_url('formeditjenisbayar/'.$id_jenis_bayar),'refresh');
+                }
+            }
+        }
+
+        public function hapus_jenis_bayar(){
+            $id_jenis_bayar = $this->input->post('id_jenis_bayar');
+            $deleted = 1;
+
+            $data = array('deleted' => $deleted);
+
+            if($this->Dashboard_model->update_jenis_bayar($id_jenis_bayar,$data)){
+                $this->session->set_flashdata('berhasil','info: data berhasil dihapus');
+                redirect(base_url("masterjenisbayar"),'refresh');
+            }else{
+                $this->session->set_flashdata('gagal','info: data gagal dihapus, silahkan cobalagi');
+                redirect(base_url("masterjenisbayar"),'refresh');
+            }
+        }
+
+        public function transaksi_laundry(){
+            $data['listtransaksi'] = $this->Dashboard_model->get_data_transaksi();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('transaksi/index-data-transaksi',$data);
+            //$this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function form_tambah_transaksi(){
+            $data['listjenislaundry'] = $this->Dashboard_model->get_jenis_laundry();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('transaksi/form-tambah-transaksi',$data);
+            //$this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function insert_transaksi_non_member(){
+            $now = date("Y-m-d");
+            $nama_pelanggan = $this->input->post('nama_pelanggan');
+            $no_telepon_pelanggan = $this->input->post('no_telepon_pelanggan');
+            $alamat_pelanggan = $this->input->post('alamat_pelanggan');
+            $email_pelanggan = '-';
+            $password_pelanggan = '-';
+            $deleted = 0;
+
+            $data_pelanggan = array(
+                'nama_pelanggan' => $nama_pelanggan,
+                'no_telepon_pelanggan' => $no_telepon_pelanggan,
+                'alamat_pelanggan' => $alamat_pelanggan,
+                'email_pelanggan' => $email_pelanggan,
+                'password_pelanggan' => $password_pelanggan,
+                'deleted' => $deleted
+            );
+
+            $id_jenis_laundry = $this->input->post('id_jenis_laundry');
+            $cek_harga_paket = $this->Dashboard_model->get_harga_paket($id_jenis_laundry);
+            $harga_jenis_laundry = $cek_harga_paket[0]['harga_jenis_laundry'];
+            $berat_barang = $this->input->post('berat_barang');
+            $total_harga = $harga_jenis_laundry * $berat_barang;
+            $tgl_transaksi = $now;
+            $status_transaksi = 'Aktif';
+            $status_bayar = 'Belum Lunas';
+            $catatan_pelanggan = $this->input->post('catatan_pelanggan');
+            $buat_no_transaksi = $this->Dashboard_model->CreateCode();
+            $no_transaksi = $buat_no_transaksi;
+            $cek_no_pelanggan = $this->Dashboard_model->get_no_pelanggan($no_telepon_pelanggan);
+            if($cek_no_pelanggan == null){
+                $id_pelanggan = 0;
+            }else{
+                $id_pelanggan = $cek_no_pelanggan[0]['id_pelanggan'];
+            }
+            
+            if($cek_no_pelanggan != null){
+                $this->Dashboard_model->update_pelanggan($id_pelanggan,$data_pelanggan);
+                $id_pelanggan = $cek_no_pelanggan[0]['id_pelanggan'];
+                $data_transaksi = array(
+                    'id_pelanggan' => $id_pelanggan,
+                    'id_jenis_laundry' => $id_jenis_laundry,
+                    'no_transaksi' => $no_transaksi,
+                    'harga_paket' => $harga_jenis_laundry,
+                    'berat_barang' => $berat_barang,
+                    'total_harga' => $total_harga,
+                    'tgl_transaksi' => $tgl_transaksi,
+                    'status_transaksi' => $status_transaksi,
+                    'status_bayar' => $status_bayar,
+                    'catatan_pelanggan' => $catatan_pelanggan,
+                    'deleted' => $deleted
+                );
+
+                if($this->Dashboard_model->insert_transaksi($data_transaksi)){
+                    $this->session->set_flashdata('berhasil','info: data transaksi berhasil disimpan');
+                    redirect(base_url('transaksi'),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data transaksi gagal disimpan, silahkan cobalagi');
+                    redirect(base_url('formaddtransaksi'),'refresh');
+                }
+            }else{
+                $this->Dashboard_model->insert_pelanggan($data_pelanggan);
+                $cek_no_pelanggan = $this->Dashboard_model->get_no_pelanggan($no_telepon_pelanggan);
+                $id_pelanggan = $cek_no_pelanggan[0]['id_pelanggan'];
+                $data_transaksi = array(
+                    'id_pelanggan' => $id_pelanggan,
+                    'id_jenis_laundry' => $id_jenis_laundry,
+                    'no_transaksi' => $no_transaksi,
+                    'harga_paket' => $harga_jenis_laundry,
+                    'berat_barang' => $berat_barang,
+                    'total_harga' => $total_harga,
+                    'tgl_transaksi' => $tgl_transaksi,
+                    'status_transaksi' => $status_transaksi,
+                    'status_bayar' => $status_bayar,
+                    'catatan_pelanggan' => $catatan_pelanggan,
+                    'deleted' => $deleted
+                );
+
+                if($this->Dashboard_model->insert_transaksi($data_transaksi)){
+                    $this->session->set_flashdata('berhasil','info: data transaksi berhasil disimpan');
+                    redirect(base_url('transaksi'),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data transaksi gagal disimpan, silahkan cobalagi');
+                    redirect(base_url('formaddtransaksi'),'refresh');
+                }
+            }
+        }
+
+        public function form_bayar_transaksi(){
+            $id_transaksi = $this->uri->segment(2);
+            $data['bayartransaksi'] = $this->Dashboard_model->get_bayar_transaksi($id_transaksi);
+            $data['datapembayaran'] = $this->Dashboard_model->get_data_pembayaran($id_transaksi);
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('transaksi/form-bayar-transaksi',$data);
+            $this->load->view('footer/index-footer-dashboard');
         }
     }
 ?>

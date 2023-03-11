@@ -139,5 +139,103 @@
         public function update_jenis_laundry($id_jenis_laundry,$data){
             return $this->db->where('id_jenis_laundry',$id_jenis_laundry)->update('tb_jenis_laundry',$data);
         }
+
+        public function get_jenis_bayar(){
+            return $this->db->where('deleted',0)
+                            ->from('tb_jenis_bayar')
+                            ->get()->result();
+        }
+
+        public function get_nama_jenis_bayar($nama_jenis_bayar){
+            return $this->db->where('deleted',0)
+                            ->where('nama_jenis_bayar',$nama_jenis_bayar)
+                            ->from('tb_jenis_bayar')
+                            ->get()->num_rows();
+        }
+
+        public function insert_jenis_bayar($data){
+            return $this->db->insert('tb_jenis_bayar',$data);
+        }
+
+        public function get_edit_jenis_bayar($id_jenis_bayar){
+            return $this->db->where('id_jenis_bayar',$id_jenis_bayar)
+                            ->from('tb_jenis_bayar')
+                            ->get()->result();
+        }
+
+        public function get_nama_jenis_bayar_edit($id_jenis_bayar,$nama_jenis_bayar){
+            return $this->db->where('id_jenis_bayar !=',$id_jenis_bayar)
+                            ->where('nama_jenis_bayar',$nama_jenis_bayar)
+                            ->from('tb_jenis_bayar')
+                            ->get()->num_rows();
+        }
+
+        public function update_jenis_bayar($id_jenis_bayar,$data){
+            return $this->db->where('id_jenis_bayar',$id_jenis_bayar)->update('tb_jenis_bayar',$data);
+        }
+
+        public function get_data_transaksi(){
+            return $this->db->where('a.deleted',0)
+                            ->where('a.status_bayar','Belum Lunas')
+                            ->select('a.*,b.*,c.*')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','ASC')
+                            ->get()->result();
+        }
+
+        public function get_bayar_transaksi($id_transaksi){
+            return $this->db->where('a.id_transaksi',$id_transaksi)
+                            ->select('a.*,b.*,c.*')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','ASC')
+                            ->get()->result();
+        }
+
+        public function get_no_pelanggan($no_telepon_pelanggan){
+            return $this->db->where('deleted',0)
+                            ->where('no_telepon_pelanggan',$no_telepon_pelanggan)
+                            ->from('tb_pelanggan')
+                            ->get()->result_array();
+        }
+
+        public function CreateCode(){
+            $this->db->select('RIGHT(tb_transaksi.no_transaksi,5) as no_transaksi', FALSE);
+            $this->db->order_by('id_transaksi','DESC');    
+            $this->db->limit(1);    
+            $query = $this->db->get('tb_transaksi');
+                if($query->num_rows() <> 0){      
+                     $data = $query->row();
+                     $kode = intval($data->no_transaksi) + 1; 
+                }
+                else{      
+                     $kode = 1;  
+                }
+            $batas = str_pad($kode, 5, "0", STR_PAD_LEFT);    
+            $kodetampil = "TR".$batas;
+            return $kodetampil;  
+        }
+
+        public function insert_transaksi($data_transaksi){
+            return $this->db->insert('tb_transaksi',$data_transaksi);
+        }
+
+
+
+        public function get_harga_paket($id_jenis_laundry){
+            return $this->db->where('id_jenis_laundry',$id_jenis_laundry)
+                            ->from('tb_jenis_laundry')
+                            ->get()->result_array();
+        }
+
+        public function get_data_pembayaran($id_transaksi){
+            return $this->db->where('id_transaksi',$id_transaksi)
+                            ->from('tb_pembayaran')
+                            ->limit(1)
+                            ->get()->result();
+        }
     }
 ?>
