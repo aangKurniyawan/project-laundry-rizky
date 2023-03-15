@@ -176,12 +176,11 @@
 
         public function get_data_transaksi(){
             return $this->db->where('a.deleted',0)
-                            ->where('a.status_bayar','Belum Lunas')
                             ->select('a.*,b.*,c.*')
                             ->from('tb_transaksi a')
                             ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
                             ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
-                            ->order_by('a.id_transaksi','ASC')
+                            ->order_by('a.id_transaksi','DESC')
                             ->get()->result();
         }
 
@@ -235,6 +234,87 @@
             return $this->db->where('id_transaksi',$id_transaksi)
                             ->from('tb_pembayaran')
                             ->limit(1)
+                            ->get()->result();
+        }
+
+        public function insert_pembayaran($data){
+            return $this->db->insert('tb_pembayaran',$data);
+        }
+
+        public function update_transaksi($id_transaksi,$data_transaksi){
+            return $this->db->where('id_transaksi',$id_transaksi)->update('tb_transaksi',$data_transaksi);
+        }
+
+        public function get_edit_transaksi($id_transaksi){
+            return $this->db->where('a.id_transaksi',$id_transaksi)
+                            ->select('a.*,b.*,c.*')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','DESC')
+                            ->get()->result();
+        }
+
+        public function get_data_laporan_transaksi($tgl_awal,$tgl_akhir,$status_transaksi){
+                     $this->db->where('a.deleted',0);
+                    $this->db->where('a.tgl_transaksi >=',$tgl_awal);
+                    $this->db->where('a.tgl_transaksi <=',$tgl_akhir);
+                    if($status_transaksi != null){
+                        $this->db->where('a.status_transaksi',$status_transaksi);
+                    }
+                    $this->db->select('a.*,b.*,c.*');
+                    $this->db->from('tb_transaksi a');
+                    $this->db->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left');
+                    $this->db->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left');
+                    $this->db->order_by('a.id_transaksi','DESC');
+                    $data = $this->db->get()->result();
+                    return $data;
+        }
+
+        public function get_data_pembayaran_transaksi(){
+            return $this->db->where('a.deleted',0)
+                            ->where('a.status_bayar','Lunas')
+                            ->select('a.*,b.*,c.*')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','DESC')
+                            ->get()->result();
+        }
+        public function get_data_jumlah_pembayaran_transaksi(){
+            return $this->db->where('a.deleted',0)
+                            ->where('a.status_bayar','Lunas')
+                            ->select('a.*,b.*,c.*,sum(a.total_harga) as total_pendapatan,sum(a.berat_barang) as total_berat_cuci')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','DESC')
+                            ->get()->result();
+        }
+
+        public function get_data_laporan_pembayaran($tgl_awal,$tgl_akhir){
+            return $this->db->where('a.deleted',0)
+                            ->where('a.status_bayar','Lunas')
+                            ->where('a.tgl_transaksi >=',$tgl_awal)
+                            ->where('a.tgl_transaksi <=',$tgl_akhir)
+                            ->select('a.*,b.*,c.*,sum(a.total_harga) as total_pendapatan,sum(a.berat_barang) as total_berat_cuci')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','DESC')
+                            ->get()->result();
+        }
+
+        public function get_data_jumlah_laporan_pembayaran($tgl_awal,$tgl_akhir){
+            return $this->db->where('a.deleted',0)
+                            ->where('a.status_bayar','Lunas')
+                            ->where('a.tgl_transaksi >=',$tgl_awal)
+                            ->where('a.tgl_transaksi <=',$tgl_akhir)
+                            ->select('a.*,b.*,c.*,sum(a.total_harga) as total_pendapatan,sum(a.berat_barang) as total_berat_cuci')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','DESC')
                             ->get()->result();
         }
     }

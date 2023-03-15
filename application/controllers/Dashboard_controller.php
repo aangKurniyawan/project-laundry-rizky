@@ -605,13 +605,195 @@
             }
         }
 
+        public function insert_transaksi_member(){
+            $now = date("Y-m-d");
+            $no_telepon_pelanggan = $this->input->post('no_telepon_pelanggan');
+            $id_jenis_laundry = $this->input->post('id_jenis_laundry');
+            $cek_harga_paket = $this->Dashboard_model->get_harga_paket($id_jenis_laundry);
+            $harga_jenis_laundry = $cek_harga_paket[0]['harga_jenis_laundry'];
+            $berat_barang = $this->input->post('berat_barang');
+            $total_harga = $harga_jenis_laundry * $berat_barang;
+            $tgl_transaksi = $now;
+            $status_transaksi = 'Aktif';
+            $status_bayar = 'Belum Lunas';
+            $catatan_pelanggan = $this->input->post('catatan_pelanggan');
+            $buat_no_transaksi = $this->Dashboard_model->CreateCode();
+            $no_transaksi = $buat_no_transaksi;
+            $cek_no_pelanggan = $this->Dashboard_model->get_no_pelanggan($no_telepon_pelanggan);
+            
+            if($cek_no_pelanggan == null){
+                $this->session->set_flashdata('gagal','info: no telepon member tidak terdaftar, silahkan cek no telepon lagi');
+                redirect(base_url('formaddtransaksi'),'refresh');
+            }else{
+                $id_pelanggan = $cek_no_pelanggan[0]['id_pelanggan'];
+                $data_transaksi = array(
+                    'id_pelanggan' => $id_pelanggan,
+                    'id_jenis_laundry' => $id_jenis_laundry,
+                    'no_transaksi' => $no_transaksi,
+                    'harga_paket' => $harga_jenis_laundry,
+                    'berat_barang' => $berat_barang,
+                    'total_harga' => $total_harga,
+                    'tgl_transaksi' => $tgl_transaksi,
+                    'status_transaksi' => $status_transaksi,
+                    'status_bayar' => $status_bayar,
+                    'catatan_pelanggan' => $catatan_pelanggan,
+                    'deleted' => 0
+                );
+    
+                if($this->Dashboard_model->insert_transaksi($data_transaksi)){
+                    $this->session->set_flashdata('berhasil','info: data transaksi berhasil disimpan');
+                    redirect(base_url('transaksi'),'refresh');
+                }else{
+                    $this->session->set_flashdata('gagal','info: data transaksi gagal disimpan, silahkan cobalagi');
+                    redirect(base_url('formaddtransaksi'),'refresh');
+                }
+            }
+        }
+
         public function form_bayar_transaksi(){
             $id_transaksi = $this->uri->segment(2);
             $data['bayartransaksi'] = $this->Dashboard_model->get_bayar_transaksi($id_transaksi);
             $data['datapembayaran'] = $this->Dashboard_model->get_data_pembayaran($id_transaksi);
+            $data['listjenisbayar'] = $this->Dashboard_model->get_jenis_bayar();
             $this->load->view('header/index-header-dashboard');
             $this->load->view('transaksi/form-bayar-transaksi',$data);
             $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function proses_bayar_transaksi(){
+            $id_transaksi = $this->input->post('id_transaksi');
+            $id_jenis_bayar = $this->input->post('id_jenis_bayar');
+            $tgl_bayar = date("Y-m-d");
+            $total_pembayaran = $this->input->post('total_harga');
+            $total_bayar = $this->input->post('total_bayar');
+            $kembalian = $total_pembayaran - $total_bayar;
+
+            if($total_bayar < $total_pembayaran){
+                $this->session->set_flashdata('gagal','info: jumlah pembayaran kurang, silahkan masukan pembayaran yang benar');
+                redirect(base_url('frombayartransaksi/'.$id_transaksi),'refresh');
+            }else if($total_bayar > $total_pembayaran || $total_bayar == $total_pembayaran){
+                $status_bayar = 'Lunas';
+            }
+
+            $data = array(
+                'id_transaksi' => $id_transaksi,
+                'id_jenis_bayar' => $id_jenis_bayar,
+                'tgl_bayar' => $tgl_bayar,
+                'total_pembayaran' => $total_pembayaran,
+                'total_bayar' => $total_bayar,
+                'kembalian' => $kembalian,
+                'status_bayar' => $status_bayar
+            );
+
+            if($this->Dashboard_model->insert_pembayaran($data)){
+                $data_transaksi = array(
+                    'status_transaksi' => 'Selesai',
+                    'status_bayar' => 'Lunas'
+                );
+                $this->Dashboard_model->update_transaksi($id_transaksi,$data_transaksi);
+                $this->session->set_flashdata('berhasil','info: data pembayaran berhasil diproses');
+                redirect(base_url('frombayartransaksi/'.$id_transaksi),'refresh');
+            }else{
+                $this->session->set_flashdata('gagal','info: data pembayaran gagal disimpan, silahkan cobalagi');
+                redirect(base_url('frombayartransaksi/'.$id_transaksi),'refresh');
+            }
+        }
+
+        public function form_edit_transaksi(){
+            $id_transaksi = $this->uri->segment(2);
+            $data['edittransaksi'] = $this->Dashboard_model->get_edit_transaksi($id_transaksi);
+            $data['listjenislaundry'] = $this->Dashboard_model->get_jenis_laundry();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('transaksi/form-edit-transaksi',$data);
+            $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function update_transaksi(){
+            $id_transaksi = $this->input->post('id_transaksi');
+            $id_pelanggan = $this->input->post('id_pelanggan');
+            $nama_pelanggan = $this->input->post('nama_pelanggan');
+            $no_telepon_pelanggan = $this->input->post('no_telepon_pelanggan');
+            $alamat_pelanggan = $this->input->post('alamat_pelanggan');
+
+            $data_pelanggan = array(
+                'nama_pelanggan' => $nama_pelanggan,
+                'no_telepon_pelanggan' => $no_telepon_pelanggan,
+                'alamat_pelanggan' => $alamat_pelanggan
+            ); 
+
+            $id_jenis_laundry = $this->input->post('id_jenis_laundry');
+            $cek_harga_paket = $this->Dashboard_model->get_harga_paket($id_jenis_laundry);
+            $harga_jenis_laundry = $cek_harga_paket[0]['harga_jenis_laundry'];
+            $berat_barang = $this->input->post('berat_barang');
+            $total_harga = $harga_jenis_laundry * $berat_barang;
+            $catatan_pelanggan = $this->input->post('catatan_pelanggan');
+
+            $data_transaksi = array(
+                'id_jenis_laundry' => $id_jenis_laundry,
+                'harga_paket' => $harga_jenis_laundry,
+                'berat_barang' => $berat_barang,
+                'total_harga' => $total_harga,
+                'catatan_pelanggan' => $catatan_pelanggan
+            );
+
+            if($this->Dashboard_model->update_pelanggan($id_pelanggan,$data_pelanggan) && $this->Dashboard_model->update_transaksi($id_transaksi,$data_transaksi)){
+                $this->session->set_flashdata('berhasil','info: data transaksi berhasil diupdate');
+                redirect(base_url('transaksi'),'refresh');
+            }else{
+                $this->session->set_flashdata('gagal','info: data gagal di update, silahkan cobalagi');
+                redirect(base_url('formedittransaksi/'.$id_transaksi),'refresh');
+            }
+        }
+
+        public function batal_transaksi(){
+            $id_transaksi = $this->input->post('id_transaksi');
+
+            $status_transaksi = 'Batal';
+
+            $data_transaksi = array('status_transaksi' => $status_transaksi);
+
+            if($this->Dashboard_model->update_transaksi($id_transaksi,$data_transaksi)){
+                $this->session->set_flashdata('berhasil','info: data transaksi berhasil dibatalkan');
+                redirect(base_url('transaksi'),'refresh');
+            }else{
+                $this->session->set_flashdata('gagal','info: data gagal di dibatalkan, silahkan cobalagi');
+                redirect(base_url('transaksi'),'refresh');
+            }
+        }
+
+        public function laporan_transaksi(){
+            $data['listtransaksi'] = $this->Dashboard_model->get_data_transaksi();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('laporan/index-laporan-transaksi',$data);
+           // $this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function cari_laporan_transaksi(){
+            $tgl_awal = $this->input->post('tgl_awal');
+            $tgl_akhir = $this->input->post('tgl_akhir');
+            $status_transaksi = $this->input->post('status_transaksi');
+            $data['listtransaksi'] = $this->Dashboard_model->get_data_laporan_transaksi($tgl_awal,$tgl_akhir,$status_transaksi);
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('laporan/index-laporan-transaksi',$data);
+            //$this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function laporan_pembayaran(){
+            $data['listtransaksi'] = $this->Dashboard_model->get_data_pembayaran_transaksi();
+            $data['jumlahbayar'] = $this->Dashboard_model->get_data_jumlah_pembayaran_transaksi();
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('laporan/index-laporan-pembayaran',$data);
+            //$this->load->view('footer/index-footer-dashboard');
+        }
+
+        public function cari_laporan_pembayaran(){
+            $tgl_awal = $this->input->post('tgl_awal');
+            $tgl_akhir = $this->input->post('tgl_akhir');
+            $data['listtransaksi'] = $this->Dashboard_model->get_data_laporan_pembayaran($tgl_awal,$tgl_akhir);
+            $data['jumlahbayar'] = $this->Dashboard_model->get_data_jumlah_laporan_pembayaran($tgl_awal,$tgl_akhir);
+            $this->load->view('header/index-header-dashboard');
+            $this->load->view('laporan/index-laporan-pembayaran',$data);
+            //$this->load->view('footer/index-footer-dashboard');
         }
     }
 ?>

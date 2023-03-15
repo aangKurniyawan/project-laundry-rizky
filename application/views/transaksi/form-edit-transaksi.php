@@ -40,7 +40,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Form Transaksi
+            Form Edit Transaksi
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -70,97 +70,60 @@
             <div class="col-md-12">
               <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#activity" data-toggle="tab">Transaksi Non Member</a></li>
-                  <li><a href="#timeline" data-toggle="tab">Transaksi Member</a></li>
+                  <li class="active"><a href="#activity" data-toggle="tab">Edit Transaksi</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <form action="<?php echo base_url("inserttransaksinonmember");?>" method="POST">
-                          <div class="box-body">
-                              <div class="row">
-                                  <div class="col-md-4">
-                                      <div class="form-group">
-                                          <label>Nama Pelanggan</label>
-                                          <input type="text" name="nama_pelanggan" class="form-control" required>
-                                      </div><!-- /.form-group -->
-                                    
-                                      <div class="form-group">
-                                          <label>Jenis Paket Laundry</label>
-                                          <select name="id_jenis_laundry" class="form-control select2" required style="width: 100%;">
-                                              <option>-Pilih Paket-</option>
-                                              <?php foreach($listjenislaundry as $jenis){ ?>
-                                                <option value="<?php echo $jenis->id_jenis_laundry;?>"><?php echo $jenis->nama_jenis_laundry;?></option>
-                                              <?php } ?>
-                                          </select>
-                                      </div><!-- /.form-group -->
-                                  </div><!-- /.col -->
-                                  <div class="col-md-4">
-                                      <div class="form-group">
-                                          <label>No Telepon</label>
-                                          <input type="text" name="no_telepon_pelanggan" class="form-control" required>
-                                      </div>
-                                      <div class="form-group">
-                                          <label>Berat Barang</label>
-                                          <input type="number" name="berat_barang" class="form-control" required>
-                                      </div>
-                                  </div><!-- /.col -->
-                                  <div class="col-md-4">
-                                      <div class="form-group">
-                                          <label>Alamat Pelanggan</label>
-                                          <input type="text" name="alamat_pelanggan" class="form-control" required>
-                                      </div>
-                                      <div class="form-group">
-                                          <label>Catatan Pelanggan</label>
-                                          <input type="text" name="catatan_pelanggan" class="form-control" >
-                                      </div>
-                                  </div><!-- /.col -->
-                                  <div class="col-md-4">
-                                      <button type="submit"  class="btn btn-sm btn-primary"> <i class="fa fa-save"></i> Simpan Transaksi </button>
-                                  </div>
-                              </div><!-- /.row -->
-                          </div>
-                        </form>
-                    </div><!-- /.tab-pane -->
-                  <div class="tab-pane" id="timeline">
-                      <div class="box-body">
-                        <form action="<?php echo base_url('inserttransaksimember');?>" method="POST"> 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>No Telepon</label>
-                                        <input type="number" name="no_telepon_pelanggan" class="form-control" required>
+                        <?php foreach($edittransaksi as $edit) { ?>
+                            <form action="<?php echo base_url("updatetransaksinonmember");?>" method="POST">
+                            <input type="hidden" name="id_transaksi" value="<?php echo $edit->id_transaksi;?>" class="form-control" required>
+                            <input type="hidden" name="id_pelanggan" value="<?php echo $edit->id_pelanggan;?>" class="form-control" required>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Nama Pelanggan</label>
+                                            <input type="text" name="nama_pelanggan" value="<?php echo $edit->nama_pelanggan;?>" class="form-control" required>
+                                        </div><!-- /.form-group -->
+                                        
+                                        <div class="form-group">
+                                            <label>Jenis Paket Laundry</label>
+                                            <select name="id_jenis_laundry" class="form-control select2" required style="width: 100%;">
+                                                <option>-Pilih Paket-</option>
+                                                <?php foreach($listjenislaundry as $jenis){ ?>
+                                                    <option value="<?php echo $jenis->id_jenis_laundry;?>" <?php if($edit->id_jenis_laundry == $jenis->id_jenis_laundry) echo "Selected : 'selected'" ;?>><?php echo $jenis->nama_jenis_laundry;?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div><!-- /.form-group -->
+                                    </div><!-- /.col -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>No Telepon</label>
+                                            <input type="text" name="no_telepon_pelanggan"  value="<?php echo $edit->no_telepon_pelanggan;?>" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Berat Barang</label>
+                                            <input type="number" name="berat_barang"  value="<?php echo $edit->berat_barang;?>" class="form-control" required>
+                                        </div>
+                                    </div><!-- /.col -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Alamat Pelanggan</label>
+                                            <input type="text" name="alamat_pelanggan"  value="<?php echo $edit->alamat_pelanggan;?>" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Catatan Pelanggan</label>
+                                            <input type="text" name="catatan_pelanggan"  value="<?php echo $edit->catatan_pelanggan;?>" class="form-control" >
+                                        </div>
+                                    </div><!-- /.col -->
+                                    <div class="col-md-4">
+                                        <button type="submit"  class="btn btn-sm btn-primary"> <i class="fa fa-save"></i> Update Transaksi </button>
                                     </div>
-                                </div><!-- /.col -->
-                                <div class="col-md-4">
-                                  <div class="form-group">
-                                    <label>Jenis Paket Laundry</label>
-                                      <select name="id_jenis_laundry" class="form-control select2" required style="width: 100%;">
-                                        <option>-Pilih Paket-</option>
-                                        <?php foreach($listjenislaundry as $jenis){ ?>
-                                          <option value="<?php echo $jenis->id_jenis_laundry;?>"><?php echo $jenis->nama_jenis_laundry;?></option>
-                                        <?php } ?>
-                                      </select>
-                                  </div>
-                                </div><!-- /.col -->
-                                <div class="col-md-4">
-                                <div class="form-group">
-                                        <label>Berat Barang</label>
-                                        <input type="number" name="berat_barang" class="form-control" required>
-                                    </div>
-                                </div><!-- /.col -->
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Catatan Pelanggan</label>
-                                        <input type="text" name="catatan_pelanggan" class="form-control" >
-                                    </div>
-                                </div><!-- /.col -->
-                                <div class="col-md-4">
-                                    <button type="submit"  class="btn btn-sm btn-primary"> <i class="fa fa-save"></i> Simpan Transaksi </button>
-                                </div>
-                            </div><!-- /.row -->
-                        </div>
-                        </form>
-                  </div>
+                                </div><!-- /.row -->
+                            </div>
+                            </form>
+                        <?php } ?>
+                    </div>
                 </div><!-- /.tab-content -->
               </div><!-- /.nav-tabs-custom -->
             </div><!-- /.col -->

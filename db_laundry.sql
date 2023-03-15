@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 11 Mar 2023 pada 09.07
+-- Waktu pembuatan: 15 Mar 2023 pada 11.44
 -- Versi server: 10.4.24-MariaDB
 -- Versi PHP: 7.4.28
 
@@ -38,7 +38,8 @@ CREATE TABLE `tb_jenis_bayar` (
 --
 
 INSERT INTO `tb_jenis_bayar` (`id_jenis_bayar`, `nama_jenis_bayar`, `deleted`) VALUES
-(1, 'tes update', 1);
+(1, 'tes update', 1),
+(0, 'Tunai', 0);
 
 -- --------------------------------------------------------
 
@@ -106,12 +107,13 @@ CREATE TABLE `tb_pelanggan` (
 --
 
 INSERT INTO `tb_pelanggan` (`id_pelanggan`, `nama_pelanggan`, `email_pelanggan`, `password_pelanggan`, `no_telepon_pelanggan`, `alamat_pelanggan`, `deleted`) VALUES
-(1, 'tes update', 'tesupdate@email.com', 'admin', '3423432', 'teds', 0),
+(1, 'tes update pet', 'tesupdate@email.com', 'admin', '342343233', 'tedssdfasdfs', 0),
 (2, 'tes', 'tes3@email.com', '450a6da43762cc60f1de29e40af78395', '4242', 'rwewrwrwrw erserw', 1),
 (3, 'tes 2', '-', '-', '536', 'dgdf', 0),
 (4, 'tes 3', '-', '-', '5363', 'dgdf', 0),
 (5, 'tes 3', '-', '-', '53633', 'dgdf', 0),
-(6, 'tes 32', '-', '-', '5362', 'dgdf', 0);
+(6, 'tes 32', '-', '-', '5362', 'dgdf', 0),
+(7, 'tes update tes', '-', '-', '345333', 'rwewrwrwrw erserw', 0);
 
 -- --------------------------------------------------------
 
@@ -122,12 +124,21 @@ INSERT INTO `tb_pelanggan` (`id_pelanggan`, `nama_pelanggan`, `email_pelanggan`,
 CREATE TABLE `tb_pembayaran` (
   `id_pembayaran` int(11) NOT NULL,
   `id_transaksi` int(11) NOT NULL,
+  `id_jenis_bayar` int(11) NOT NULL,
   `tgl_bayar` date NOT NULL,
   `total_pembayaran` int(7) NOT NULL,
   `total_bayar` int(7) NOT NULL,
   `kembalian` int(7) NOT NULL,
   `status_bayar` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_pembayaran`
+--
+
+INSERT INTO `tb_pembayaran` (`id_pembayaran`, `id_transaksi`, `id_jenis_bayar`, `tgl_bayar`, `total_pembayaran`, `total_bayar`, `kembalian`, `status_bayar`) VALUES
+(1, 1, 0, '2023-03-11', 9000, 9000, 0, 'Lunas'),
+(2, 3, 0, '2023-03-15', 9000, 50000, -41000, 'Lunas');
 
 -- --------------------------------------------------------
 
@@ -177,7 +188,10 @@ CREATE TABLE `tb_transaksi` (
 --
 
 INSERT INTO `tb_transaksi` (`id_transaksi`, `id_pelanggan`, `id_jenis_laundry`, `no_transaksi`, `harga_paket`, `berat_barang`, `total_harga`, `tgl_transaksi`, `status_transaksi`, `status_bayar`, `catatan_pelanggan`, `deleted`) VALUES
-(1, 4, 2, 'TR00001', 3000, 3, 9000, '2023-03-11', 'Aktif', 'Belum Lunas', 'tydf', 0);
+(1, 4, 2, 'TR00001', 3000, 3, 9000, '2023-03-11', 'Selesai', 'Lunas', 'tydf', 0),
+(2, 7, 2, 'TR00002', 3000, 5, 15000, '2023-03-12', 'Batal', 'Belum Lunas', '3erdfd tese', 0),
+(3, 0, 2, 'TR00003', 3000, 3, 9000, '2023-03-12', 'Selesai', 'Lunas', '3erdfd', 0),
+(4, 1, 2, 'TR00004', 3000, 4, 12000, '2023-03-15', 'Aktif', 'Belum Lunas', '4gfgdssdfss', 0);
 
 --
 -- Indexes for dumped tables
@@ -239,13 +253,13 @@ ALTER TABLE `tb_owner`
 -- AUTO_INCREMENT untuk tabel `tb_pelanggan`
 --
 ALTER TABLE `tb_pelanggan`
-  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_pembayaran`
 --
 ALTER TABLE `tb_pembayaran`
-  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_staf`
@@ -257,7 +271,7 @@ ALTER TABLE `tb_staf`
 -- AUTO_INCREMENT untuk tabel `tb_transaksi`
 --
 ALTER TABLE `tb_transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

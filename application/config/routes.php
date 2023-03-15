@@ -89,4 +89,14 @@ $route['hapusjenisbayar'] = 'Dashboard_controller/hapus_jenis_bayar';
 $route['transaksi'] = 'Dashboard_controller/transaksi_laundry';
 $route['formaddtransaksi'] = 'Dashboard_controller/form_tambah_transaksi';
 $route['inserttransaksinonmember'] = 'Dashboard_controller/insert_transaksi_non_member';
+$route['inserttransaksimember'] = 'Dashboard_controller/insert_transaksi_member';
 $route['frombayartransaksi/:any'] = 'Dashboard_controller/form_bayar_transaksi';
+$route['prosesbayar'] = 'Dashboard_controller/proses_bayar_transaksi';
+$route['formedittransaksi/:any'] = 'Dashboard_controller/form_edit_transaksi';
+$route['updatetransaksinonmember'] = 'Dashboard_controller/update_transaksi';
+$route['bataltransaksi'] = 'Dashboard_controller/batal_transaksi';
+$route['laporantransaksi'] = 'Dashboard_controller/laporan_transaksi';
+$route['carilaporantransaksi'] = 'Dashboard_controller/cari_laporan_transaksi';
+$route['laporanpembayaran'] = 'Dashboard_controller/laporan_pembayaran';
+$route['carilaporanpembayaran'] = 'Dashboard_controller/cari_laporan_pembayaran';
+

@@ -62,11 +62,51 @@
         <section class="content">
           <div class="row">
             <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-body">
+                            <form action="<?php echo base_url('carilaporantransaksi');?>" method="POST">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Tanggal Awal</label>
+                                            <input type="date" name="tgl_awal" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Tanggal Akhir</label>
+                                            <input type="date" name="tgl_akhir" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Status Transaksi</label>
+                                            <select name="status_transaksi" class="form-control">
+                                                <option value="">-Semua Status-</option>
+                                                <option value="Aktif">Aktif</option>
+                                                <option value="Selesai">Selesai</option>
+                                                <option value="Batal">Batal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="padding-top:25px;!importan">
+                                        <div class="form-group">
+                                            <button type="submit"  class="btn btn-sm btn-primary"> <i class="fa fa-save"></i> Cari Data </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                  <div class="box-tools pull-right">
+                  <!-- <div class="box-tools pull-right">
                     <a href="<?php echo base_url('formaddtransaksi');?>" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Tambah Data</a>
-                  </div>
+                  </div> -->
                   <br>
                 </div><!-- /.box-header -->
                 <div class="box-body">
@@ -75,6 +115,7 @@
                       <tr>
                         <th width="10px">No</th>
                         <th>No Transaksi</th>
+                        <th>Tgl Transaksi</th>
                         <th>Nama Pelanggan</th>
                         <th>No Telepon</th>
                         <th>Berat</th>
@@ -82,7 +123,6 @@
                         <th>Total Harga</th>
                         <th>Status Bayar</th>
                         <th>Status</th>
-                        <th width="150px">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -93,6 +133,7 @@
                         <tr>
                           <td><?php echo $no++;?></td>
                           <td><?php echo $transaksi->no_transaksi;?></td>
+                          <td><?php echo $transaksi->tgl_transaksi;?></td>
                           <td><?php echo $transaksi->nama_pelanggan;?></td>
                           <td><?php echo $transaksi->no_telepon_pelanggan;?></td>
                           <td><?php echo $transaksi->berat_barang;?> Kg</td>
@@ -100,11 +141,6 @@
                           <td><?php echo number_format($transaksi->total_harga);?></td>
                           <td><?php echo $transaksi->status_bayar;?></td>
                           <td><?php echo $transaksi->status_transaksi;?></td>
-                          <td>
-                            <a class="btn btn-xs btn-success" href="<?php echo base_url('frombayartransaksi/'.$transaksi->id_transaksi);?>"><i class="fa fa-money"></i> Bayar</a>
-                            <a <?php if($transaksi->status_bayar == 'Lunas' || $transaksi->status_transaksi == 'Batal') echo 'href=#'  ;?> class="btn btn-xs btn-warning" href="<?php echo base_url('formedittransaksi/'.$transaksi->id_transaksi);?>"><i class="fa fa-edit"></i> Edit</a>
-                            <a <?php if($transaksi->status_bayar == 'Lunas' || $transaksi->status_transaksi == 'Batal') echo 'disabled' ;?> class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modalhapus_<?php echo $transaksi->id_transaksi;?>"><i class="fa fa-trash"></i> Batal</a>
-                          </td>
                         </tr>
                       <?php } ?>
                     </tbody>
@@ -112,6 +148,7 @@
                       <tr>
                         <th width="10px">No</th>
                         <th>No Transaksi</th>
+                        <th>Tgl Transaksi</th>
                         <th>Nama Pelanggan</th>
                         <th>No Telepon</th>
                         <th>Berat</th>
@@ -119,7 +156,6 @@
                         <th>Total Harga</th>
                         <th>Status Bayar</th>
                         <th>Status</th>
-                        <th width="90px">Aksi</th>
                       </tr>
                     </tfoot>
                   </table>
@@ -131,30 +167,6 @@
       </div><!-- /.content-wrapper -->
       <div class="control-sidebar-bg"></div>
     </div><!-- ./wrapper -->
-
-    <?php foreach($listtransaksi as $hapus) {?>
-      <div class="modal fade" id="modalhapus_<?php echo $hapus->id_jenis_laundry;?>" tabindex="-1" role="dialog" aria-labelledby="modalSayaLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalSayaLabel">Hapus Data</h5>
-            </div>
-            <div class="modal-body">
-              Data transaksi dengan nomor : <?php echo $hapus->no_transaksi;?> akan dibatalkan
-              <br/>
-              data tidak bisa dirubah lagi
-            </div>
-            <div class="modal-footer">
-              <form action="<?php echo base_url('bataltransaksi');?>" method="POST">
-                <input type="hidden" name="id_transaksi" value="<?php echo $hapus->id_transaksi;?>">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
-                <button type="submit" class="btn btn-primary">Batalkan Transaksi</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    <?php } ?>
     <!-- jQuery 2.1.4 -->
     <script src="<?php echo base_url();?>assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->

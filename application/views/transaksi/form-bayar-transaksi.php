@@ -123,7 +123,7 @@
                       </tr>
                       <tr>
                         <th>Kembalian:</th>
-                        <td>Rp <?php echo number_format($pembayaran->total_pembayaran);?> ,-</td>
+                        <td>Rp <?php echo number_format($pembayaran->kembalian);?> ,-</td>
                       </tr>
                       <tr>
                         <th>Status Pembayaran:</th>
@@ -138,10 +138,57 @@
             <!-- this row will not appear when printing -->
             <div class="row no-print">
               <div class="col-xs-12">
-                <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Pembayaran</button>
+                <button <?php if($bayar->status_bayar == 'Lunas') echo 'disabled' ;?> class="btn btn-success pull-right" data-toggle="modal" data-target="#modalbayar"><i class="fa fa-credit-card"></i> Pembayaran</button>
               </div>
             </div>
           <?php } ?>
         </section><!-- /.content -->
         <div class="clearfix"></div>
       </div>
+
+      <?php foreach($bayartransaksi as $posbayar) {?>
+      <div class="modal fade" id="modalbayar" tabindex="-1" role="dialog" aria-labelledby="modalSayaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalSayaLabel">Form Bayar Transaksi</h5>
+            </div>
+            <div class="modal-body">
+              <form action="<?php echo base_url('prosesbayar');?>" method="POST">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Total Harga</label>
+                      <input type="text" value="<?php echo number_format($posbayar->total_harga);?>" readonly class="form-control" required>
+                      <input type="hidden" name="total_harga" value="<?php echo $posbayar->total_harga;?>" readonly class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Metode Pembayaran</label>
+                      <select name="id_jenis_bayar" class="select2 form-control" required>
+                          <option value="">-Pilih Jenis Pembayaran-</option>
+                          <?php foreach($listjenisbayar as $jenis) { ?>
+                            <option value="<?php echo $jenis->id_jenis_bayar;?>"><?php echo $jenis->nama_jenis_bayar;?></option>
+                          <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Total Bayar</label>
+                      <input type="number" name="total_bayar"class="form-control" required>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="id_transaksi" value="<?php echo $posbayar->id_transaksi;?>">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Proses Bayar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php } ?>
