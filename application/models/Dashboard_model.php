@@ -1,6 +1,59 @@
 <?php 
     class Dashboard_model extends CI_Model{
 
+        public function get_total_pembayaran($now){
+            return $this->db->where('tgl_bayar',$now)
+                            ->select('sum(total_bayar) as total_pendapatan')
+                            ->from('tb_pembayaran')
+                            ->get()->result();
+        }
+
+        public function get_total_transaksi_aktif(){
+            return $this->db->where('status_transaksi','Aktif')
+                            ->select('sum(status_transaksi) as transaksi_aktif')
+                            ->from('tb_transaksi')
+                            ->get()->result();
+        }
+
+        public function get_total_transaksi_selesai($now){
+            return $this->db->where('tgl_transaksi',$now)
+                            ->where('status_transaksi','Selesai')
+                            ->select('count(status_transaksi) as transaksi_selesai')
+                            ->from('tb_transaksi')
+                            ->get()->result();
+        }
+
+        public function get_transaksi_baru($now){
+            return $this->db->where('a.deleted',0)
+                            ->where('a.tgl_transaksi',$now)
+                            ->select('a.*,b.*,c.*')
+                            ->from('tb_transaksi a')
+                            ->join('tb_pelanggan b','a.id_pelanggan = b.id_pelanggan','left')
+                            ->join('tb_jenis_laundry c','a.id_jenis_laundry = c.id_jenis_laundry','left')
+                            ->order_by('a.id_transaksi','ASC')
+                            ->limit(7)
+                            ->get()->result();
+        }
+
+        public function get_total_member(){
+            return $this->db->where('deleted',0)
+                            ->where('email_pelanggan !=','-')
+                            ->select('count(id_pelanggan) as total_member')
+                            ->from('tb_pelanggan')
+                            ->get()->result();
+        }
+
+        public function get_rekap_transaksi_produk(){
+            return $this->db->where('a.deleted',0)
+                            ->where('status_transaksi','Selesai')
+                            ->select('a.*,b.*,count(*) as total_transaksi_produk')
+                            ->from('tb_transaksi a')
+                            ->join('tb_jenis_laundry b','a.id_jenis_laundry = b.id_jenis_laundry','left')
+                            ->group_by('a.id_jenis_laundry')
+                            ->limit(10)
+                            ->get()->result();
+        }
+
         public function get_list_owner(){
             return $this->db->where('deleted',0)
                             ->from('tb_owner')

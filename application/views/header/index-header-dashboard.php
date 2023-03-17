@@ -248,13 +248,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <span class="hidden-xs">Alexander Pierce</span>
+                  <span class="hidden-xs"><?php echo $this->session->userdata('session_nama');?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-right">
-                      <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                      <a href="<?php echo base_url('logout');?>" class="btn btn-default btn-flat">Sign out</a>
                     </div>
                   </li>
                 </ul>
@@ -274,7 +274,7 @@
               <img src="<?php echo base_url();?>assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>Alexander Pierce</p>
+              <p><?php echo $this->session->userdata('session_nama');?></p>
               <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
           </div>
@@ -292,7 +292,7 @@
                 <span>Data Pengguna</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo base_url('masterowner');?>"><i class="fa fa-circle-o"></i> Data Owner</a></li>
+                <li <?php if($this->session->userdata('session_level') != 'Owner') echo "hidden" ;?>><a  href="<?php echo base_url('masterowner');?>"><i class="fa fa-circle-o"></i> Data Owner</a></li>
                 <li><a href="<?php echo base_url('masterstaf');?>"><i class="fa fa-circle-o"></i> Data Staf</a></li>
                 <li><a href="<?php echo base_url('masterpelanggan');?>"><i class="fa fa-circle-o"></i> Data Pelanggan</a></li>
               </ul>
@@ -325,7 +325,7 @@
               </ul>
             </li>
             <li>
-              <a href="pages/calendar.html">
+              <a href="<?php echo base_url('logout');?>">
                 <i class="fa fa-gear"></i> <span>Logout</span>
               </a>
             </li>

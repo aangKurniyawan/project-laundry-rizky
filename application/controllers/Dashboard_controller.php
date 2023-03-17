@@ -3,10 +3,22 @@
         public function __construct(){
             parent:: __construct();
             $this->load->model('Dashboard_model');
+            if($this->session->userdata('masuk') != TRUE){
+                $url=base_url('login');
+                redirect($url);
+            }
         }
+
         public function index(){
+            $now = date('Y-m-d');
+            $data['totalbayar'] = $this->Dashboard_model->get_total_pembayaran($now);
+            $data['transaksiaktif'] = $this->Dashboard_model->get_total_transaksi_aktif();
+            $data['transaksiselesai'] = $this->Dashboard_model->get_total_transaksi_selesai($now);
+            $data['totalmember'] = $this->Dashboard_model->get_total_member();
+            $data['transaksibaru'] = $this->Dashboard_model->get_transaksi_baru($now);
+            $data['rekapproduk'] = $this->Dashboard_model->get_rekap_transaksi_produk();
             $this->load->view('header/index-header-dashboard');
-            $this->load->view('dashboard/index-dashboard');
+            $this->load->view('dashboard/index-dashboard',$data);
             $this->load->view('footer/index-footer-dashboard');
         }
 
@@ -28,12 +40,13 @@
             $no_telepon_owner = $this->input->post('no_telepon_owner');
             $email_owner = $this->input->post('email_owner');
             $password_owner = $this->input->post('password_owner');
-
+            $level = 'Owner';
             $data = array(
                 'nama_owner' => $nama_owner,
                 'no_telepon_owner' => $no_telepon_owner,
                 'email_owner' => $email_owner,
-                'password_owner' => md5($password_owner)
+                'password_owner' => md5($password_owner),
+                'level' => $level
             );
 
             $cek_email_owner = $this->Dashboard_model->get_email_owner($email_owner);
@@ -130,6 +143,7 @@
             $no_telepon_staf = $this->input->post('no_telepon_staf');
             $email_staf = $this->input->post('email_staf');
             $password_staf = $this->input->post('password_staf');
+            $level = 'Staf';
             $deleted = 0;
 
             $data = array(
@@ -137,6 +151,7 @@
                 'no_telepon_staf' => $no_telepon_staf,
                 'email_staf' => $email_staf,
                 'password_staf' => md5($password_staf),
+                'level' => $level,
                 'deleted' => $deleted
             ); 
 

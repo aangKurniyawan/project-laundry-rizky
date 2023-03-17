@@ -53,6 +53,10 @@ $route['default_controller'] = 'Login_controller';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+/*LOGIN ROUTE */
+$route['login'] = 'Login_controller/index';
+$route['auth'] = 'Login_controller/auth';
+$route['logout'] = 'Login_controller/logout';
 
 /* DASHBOARD */
 $route['dashboard'] = 'Dashboard_controller/index';
@@ -99,4 +103,3 @@ $route['laporantransaksi'] = 'Dashboard_controller/laporan_transaksi';
 $route['carilaporantransaksi'] = 'Dashboard_controller/cari_laporan_transaksi';
 $route['laporanpembayaran'] = 'Dashboard_controller/laporan_pembayaran';
 $route['carilaporanpembayaran'] = 'Dashboard_controller/cari_laporan_pembayaran';
-
