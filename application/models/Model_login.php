@@ -10,5 +10,10 @@
             return $query;
         }
 
+        public function cek_member($username,$password){
+            $query = $this->db->query("SELECT * FROM tb_pelanggan WHERE email_pelanggan ='$username' AND password_pelanggan ='$password' AND deleted='0' LIMIT 1");
+            return $query;
+        }
+
     }
 ?>

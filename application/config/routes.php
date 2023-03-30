@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Login_controller';
+$route['default_controller'] = 'Homepage_controller';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -57,6 +57,23 @@ $route['translate_uri_dashes'] = FALSE;
 $route['login'] = 'Login_controller/index';
 $route['auth'] = 'Login_controller/auth';
 $route['logout'] = 'Login_controller/logout';
+$route['authmember'] = 'Login_controller/auth_member';
+$route['logoutmember'] = 'Login_controller/logout_member';
+/*LOGIN ROUTE*/ 
+
+/*HOMEPAGE ROUTE*/ 
+$route['homepage'] = 'Homepage_controller/index';
+$route['produk'] = 'Homepage_controller/menu_produk';
+$route['detailproduk/:any'] = 'Homepage_controller/detail_produk';
+$route['kontak'] = 'Homepage_controller/menu_kontak';
+$route['daftar'] = 'Homepage_controller/menu_daftar_member';
+$route['insertmember'] = 'Homepage_controller/insert_member';
+$route['formloginmember'] = 'Homepage_controller/form_login_member';
+$route['transaksimember'] = 'Homepage_controller/transaksi_member';
+$route['forminserttransaksimember/:any'] = 'Homepage_controller/form_insert_transaksi_member';
+$route['inserttransaksipelanggan'] = 'Homepage_controller/insert_transaksi_member_homepage';
+$route['detailtransaksimember/:any'] = 'Homepage_controller/detail_transaksi_member';
+/*HOMEPAGE ROUTE*/
 
 /* DASHBOARD */
 $route['dashboard'] = 'Dashboard_controller/index';

@@ -10,7 +10,7 @@
 
         public function get_total_transaksi_aktif(){
             return $this->db->where('status_transaksi','Aktif')
-                            ->select('sum(status_transaksi) as transaksi_aktif')
+                            ->select('count(status_transaksi) as transaksi_aktif')
                             ->from('tb_transaksi')
                             ->get()->result();
         }
@@ -40,6 +40,15 @@
                             ->where('email_pelanggan !=','-')
                             ->select('count(id_pelanggan) as total_member')
                             ->from('tb_pelanggan')
+                            ->get()->result();
+        }
+
+        public function get_data_member(){
+            return $this->db->where('deleted',0)
+                            ->where('email_pelanggan !=','-')
+                            ->from('tb_pelanggan')
+                            ->order_by('id_pelanggan','DESC')
+                            ->limit(8)
                             ->get()->result();
         }
 

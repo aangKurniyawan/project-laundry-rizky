@@ -17,6 +17,7 @@
             $data['totalmember'] = $this->Dashboard_model->get_total_member();
             $data['transaksibaru'] = $this->Dashboard_model->get_transaksi_baru($now);
             $data['rekapproduk'] = $this->Dashboard_model->get_rekap_transaksi_produk();
+            $data['listmember'] = $this->Dashboard_model->get_data_member();
             $this->load->view('header/index-header-dashboard');
             $this->load->view('dashboard/index-dashboard',$data);
             $this->load->view('footer/index-footer-dashboard');
@@ -249,6 +250,7 @@
             $email_pelanggan = $this->input->post('email_pelanggan');
             $password_pelanggan = $this->input->post('password_pelanggan'); 
             $alamat_pelanggan = $this->input->post('alamat_pelanggan');
+            $level = 'Member';
             $deleted = 0;
 
             $data = array(
@@ -257,6 +259,7 @@
                 'email_pelanggan' => $email_pelanggan,
                 'password_pelanggan' => md5($password_pelanggan),
                 'alamat_pelanggan' => $alamat_pelanggan,
+                'level' => $level,
                 'deleted' => $deleted
             );
 
